@@ -1,0 +1,16 @@
+next.js 
+figma https://www.figma.com/design/6iEpxVq2mYUqEEvMcUEBGf/PIZZAHUB?node-id=0-1&node-type=canvas&t=nYTgzpdci9G9LR9s-0
+TypeScript
+NextJS (Parallel Routes, Group Routes, Server Actions, API)
+TailwindCSS + ShadCN https://ui.shadcn.com/themes
+shadcn - Как упоминалось ранее, shadcn/ui — это технология, с помощью которой дизайн-системы могут быть выражены в коде. Она позволяет команде фронтенда перевести дизайн-систему в формат, который может быть использован в процессе разработки.
+шрифт nunito
+ 
+Компонетны из shadcn: button slider skeleton select popover input drawer checkbox dialog 
+
+lucide - берем отсюда иконки https://lucide.dev/
+
+!Можем кликань и на сам текс check-box 
+!Стрелка корзины двигается
+
+остановился на 1.52.30
