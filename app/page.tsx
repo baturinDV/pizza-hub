@@ -40,6 +40,20 @@ export default function Home() {
               imageUrl: "https://media.dodostatic.net/image/r:292x292/11ef9c1daafcf3529a62947b9522a8fe.avif",
               price: 550,
               items: [{price: 550},{price: 600},{price: 650}],
+            },
+            {
+              id: 2,
+              name: "Чизбургер пицца",
+              imageUrl: "https://media.dodostatic.net/image/r:292x292/11ef9c1daafcf3529a62947b9522a8fe.avif",
+              price: 550,
+              items: [{price: 550},{price: 600},{price: 650}],
+            },
+            {
+              id: 3,
+              name: "Чизбургер пицца",
+              imageUrl: "https://media.dodostatic.net/image/r:292x292/11ef9c1daafcf3529a62947b9522a8fe.avif",
+              price: 550,
+              items: [{price: 550},{price: 600},{price: 650}],
             }
             ]} categoryId={1}>
             </ProductsGroupList>
