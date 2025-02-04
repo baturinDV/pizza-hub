@@ -94,7 +94,7 @@ model Cart {
 
   items CartItem[]
 
-  tokenId String
+  token String
 
   totalAmount Int @default(0)
 
