@@ -1,6 +1,5 @@
-import { Container, Title, TopBar, Filters } from "@/components/shared";
-import { ProductCard } from "@/components/shared/product-card";
-import { ProductsGroupList } from "@/components/shared/products-group-list";
+import { Container, Title, TopBar, Filters } from "@/shared/components/shared";
+import { ProductsGroupList } from "@/shared/components/shared/products-group-list";
 import { prisma } from "@/prisma/prisma client";
 
 export default async function Home() {
@@ -18,7 +17,7 @@ export default async function Home() {
   
   return <>
     <Container className="mt-10">
-      <Title text="Мага сияй" size="lg" className="font-extrabold"/>
+      <Title text="Один продукт тебе? Или два другому!?" size="lg" className="font-extrabold"/>
 
     </Container>
     <TopBar categories={categories.filter((category) => category.products.length > 0)}/>
