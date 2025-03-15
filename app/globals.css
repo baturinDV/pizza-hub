@@ -79,6 +79,26 @@ html {
   body {
     @apply bg-background text-foreground;
   }
+
+  /*body {
+    position: relative;
+    @apply text-black;
+  }
+
+  body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('https://i.pinimg.com/originals/44/c0/49/44c0495d9bda8309fcfa207b6e848776.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.5; 
+      z-index: -1; 
+  } */
 }
 
 #nprogress .bar {
