@@ -5,9 +5,13 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckoutFormValues, checkoutFormSchema } from "@/shared/constants";
 import { cn } from "@/shared/lib/utils";
+import { createOrder } from "@/app/actions";
+import toast from "react-hot-toast";
+import React from "react";
 
 
 export default function CheckoutPage() {
+  const [submitting, setSubmitting] = React.useState(false);
   const {totalAmount, updateItemQuantity,items, removeCartItem, loading} = useCart();
 
   const form = useForm<CheckoutFormValues>({
@@ -23,7 +27,24 @@ export default function CheckoutPage() {
   });
 
   const onSubmit = async (data: CheckoutFormValues) => {
-    console.log(data);
+    try {
+      setSubmitting(true);
+      const url = await createOrder(data); //url - ссылка на страницу оплаты
+      
+      toast.error('Заказ успешно оформлен! Переход на оплату ... 📝', {
+        icon: '✅',
+      });
+
+      if (url) {
+        location.href = url;
+      }
+    } catch (error) {
+        console.log(error);
+        setSubmitting(false);
+        toast.error('Неверный E-Mail или пароль', {
+          icon: '❌',
+        });
+    }
   };
 
   const onClickCountButton = (id: number, quantity: number, type: 'plus' | 'minus') => {
@@ -59,7 +80,7 @@ export default function CheckoutPage() {
                 <div className="w-[450px]">
                     <CheckoutSidebar
                     totalAmount={totalAmount}
-                    loading={loading}>
+                    loading={loading || submitting}>
                     </CheckoutSidebar>
                 </div>
               </div>
