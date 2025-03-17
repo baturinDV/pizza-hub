@@ -1,7 +1,9 @@
 'use server';
 
 import { prisma } from "@/prisma/prisma client";
+import { PayOrderTemplate } from "@/shared/components";
 import { CheckoutFormValues } from "@/shared/constants";
+import { sendEmail } from "@/shared/lib";
 import { OrderStatus } from "@prisma/client";
 import { cookies } from "next/headers";
 
@@ -73,13 +75,19 @@ export async function createOrder(data: CheckoutFormValues) {
             where: {
               cartId: userCart.id,
             },
-          });
+        });
+  
+     
+       await sendEmail(data.email, `Next Pizza / Оплатите заказ #` + order.id, PayOrderTemplate({
+            orderId: order.id,
+            totalAmount: order.totalAmount,
+            paymentUrl: 'https://resend.com/docs/send-with-nextjs',
+       }));
 
-          
-        return "https://github.com/baturinDV/pizza-hub/commits/master/"; 
+
+        return "https://github.com"; 
     } catch (error) {
-        console.log('[CART_CHECKOUT_POST] Server error', error);
-        throw error;
+        console.log('[CreateOrder] Server error', error);
     }
 }
   /*  try {
