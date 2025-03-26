@@ -3,7 +3,7 @@
 import { prisma } from "@/prisma/prisma client";
 import { PayOrderTemplate } from "@/shared/components";
 import { CheckoutFormValues } from "@/shared/constants";
-import { sendEmail } from "@/shared/lib";
+import { createPayment, sendEmail } from "@/shared/lib";
 import { OrderStatus } from "@prisma/client";
 import { cookies } from "next/headers";
 
@@ -77,39 +77,16 @@ export async function createOrder(data: CheckoutFormValues) {
             },
         });
   
-     
-       await sendEmail(data.email, `Next Pizza / Оплатите заказ #` + order.id, PayOrderTemplate({
-            orderId: order.id,
-            totalAmount: order.totalAmount,
-            paymentUrl: 'https://resend.com/docs/send-with-nextjs',
-       }));
+        const paymentData = await createPayment({
+          amount: order.totalAmount,
+          orderId: order.id,
+          description: 'Оплата заказа #' + order.id,
+        });
 
+        if(!paymentData) {
+          throw new Error('Payment data not found');
+        }
 
-        return "https://github.com"; 
-    } catch (error) {
-        console.log('[CreateOrder] Server error', error);
-    }
-}
-  /*  try {
-      const currentUser = await getUserSession();
-      const userId = Number(currentUser?.id);
-      const cookieStore = cookies();
-      const cartToken = cookieStore.get('cartToken')?.value;
-  
-      
-  
-  
-
-  
-
-  
-      const paymentData = await createPayment({
-        orderId: order.id,
-        amount: order.totalAmount,
-        description: `Заказ #${order.id}`,
-      });
-  
-      if (paymentData) {
         await prisma.order.update({
           where: {
             id: order.id,
@@ -118,21 +95,18 @@ export async function createOrder(data: CheckoutFormValues) {
             paymentId: paymentData.id,
           },
         });
-      }
-  
-      const html = `
-        <h1>Заказ #${order?.id}</h1>
-  
-        <p>Оплатите заказ на сумму ${order?.totalAmount}. Перейдите <a href="${paymentData.confirmation.confirmation_url}">по ссылке</a> для оплаты заказа.</p>
-      `;
-  
-      if (userCart.user?.email) {
-        await sendEmail(userCart.user?.email, `Next Pizza / Оплатите заказ #${order?.id}`, html);
-      }
-  
-      return paymentData.confirmation.confirmation_url;
+
+        const paymentUrl = paymentData.confirmation.confirmation_url;
+
+       await sendEmail(data.email, `Next Pizza / Оплатите заказ #` + order.id, PayOrderTemplate({
+            orderId: order.id,
+            totalAmount: order.totalAmount,
+            paymentUrl: paymentUrl,
+       }));
+
+
+        return paymentUrl; 
     } catch (error) {
-      console.log('[CART_CHECKOUT_POST] Server error', error);
-      throw error;
+        console.log('[CreateOrder] Server error', error);
     }
-  }*/
+}
