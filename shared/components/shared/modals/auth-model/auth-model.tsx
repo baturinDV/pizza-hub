@@ -1,12 +1,12 @@
 import React from 'react';
-import { Dialog, DialogContent } from '@/shared/components/ui/dialog';
+import { Dialog, DialogContent } from '@/shared/components/ui';
 import { Button } from '@/shared/components';
 import { signIn } from 'next-auth/react';
 import { LoginForm } from './forms/login-form';
 
 interface Props {
     open: boolean;
-    onClose:  VoidFunction;
+    onClose:  () => void;
   }
 
 export const AuthModel: React.FC<Props> = ({ open, onClose }) => {
@@ -23,11 +23,11 @@ export const AuthModel: React.FC<Props> = ({ open, onClose }) => {
     return (
       <Dialog open={open} onOpenChange={handleClose}>
         <DialogContent className="w-[450px] bg-white p-10">
-          
+
             {
                 type === 'login' ? <LoginForm onClose={handleClose} /> : <h1>REGISTER</h1>
             }
-
+          
           <hr />
           <div className="flex gap-2">
             <Button
@@ -63,8 +63,8 @@ export const AuthModel: React.FC<Props> = ({ open, onClose }) => {
           </div>
           <Button variant="outline" onClick={onSwitchType} type="button" className="h-12">
             {type !== 'login' ? 'Войти' : 'Регистрация'}
-          </Button>
-        </DialogContent>
+          </Button> 
+        </DialogContent> 
       </Dialog>
     );
   };

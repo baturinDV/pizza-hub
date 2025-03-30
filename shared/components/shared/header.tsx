@@ -28,8 +28,6 @@ export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, clas
         }
     }, [])
 
-    const onClickOpenAuthModel = () => setOpenAuthModel(true);
-
     return (
         <header className={cn("border-b", className)}>
             <Container className="flex items-center justify-between py-8">
@@ -54,8 +52,9 @@ export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, clas
                 {/* Правая часть*/}
                 <div className="flex items-center gap-3">
                     {/* Можно отобразить скелетон при загрузке */}
-                    <AuthModel open={openAuthModel} onClose={onClickOpenAuthModel} />
-                    <ProfileButton onClickOpenModel={onClickOpenAuthModel} />
+
+                    <AuthModel open={openAuthModel} onClose={() => setOpenAuthModel(false)} /> 
+                    <ProfileButton onClickOpenModel={() => setOpenAuthModel(true)}  /> 
                     {hasCart && <CartButton />}
                 </div>
             </Container>
