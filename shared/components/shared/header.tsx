@@ -10,6 +10,7 @@ import { ProfileButton } from './profile-button';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 interface Props {
     hasSearch?: boolean;
@@ -18,13 +19,27 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, className}) => {
+    const router = useRouter();
     const [openAuthModel, setOpenAuthModel] = React.useState(false);
     const searchParams = useSearchParams();
     React.useEffect(() => {
-        if(searchParams.has('paid')){
-            setTimeout(() => {
-                toast.success('Заказ успешно оплачен! Информация отправлена на почту. ');
-            }, 500);
+        let toastMessage = '';
+
+        if (searchParams.has('verified')) {
+        toastMessage = 'Почта успешно подтверждена!';
+        }
+
+        if (searchParams.has('paid')) {
+        toastMessage = 'Заказ успешно оплачен! Информация отправлена на почту.';
+        }
+
+        if (toastMessage) {
+        setTimeout(() => {
+            router.replace('/');
+            toast.success(toastMessage, {
+            duration: 3000,
+            });
+        }, 1000);
         }
     }, [])
 
