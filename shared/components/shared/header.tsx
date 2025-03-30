@@ -2,10 +2,11 @@
 import React from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Container } from './container';
+import { SearchInput } from './search-input';
 import Image from 'next/image';
-import { Button } from '../ui';
-import { User } from 'lucide-react';
-import { CartButton, SearchInput } from '.';
+import { CartButton } from './cart-button';
+import { AuthModel } from './modals/auth-model';
+import { ProfileButton } from './profile-button';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, className}) => {
+    const [openAuthModel, setOpenAuthModel] = React.useState(false);
     const searchParams = useSearchParams();
     React.useEffect(() => {
         if(searchParams.has('paid')){
@@ -25,6 +27,9 @@ export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, clas
             }, 500);
         }
     }, [])
+
+    const onClickOpenAuthModel = () => setOpenAuthModel(true);
+
     return (
         <header className={cn("border-b", className)}>
             <Container className="flex items-center justify-between py-8">
@@ -48,15 +53,11 @@ export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, clas
             
                 {/* Правая часть*/}
                 <div className="flex items-center gap-3">
-                    <Button variant="outline" className='flex items-center gap-1'>
-                        <User size={16}/>
-                        Войти
-                    </Button> 
-                    <div>
-                       {hasCart && <CartButton />}
-                    </div>
+                    {/* Можно отобразить скелетон при загрузке */}
+                    <AuthModel open={openAuthModel} onClose={onClickOpenAuthModel} />
+                    <ProfileButton onClickOpenModel={onClickOpenAuthModel} />
+                    {hasCart && <CartButton />}
                 </div>
-                
             </Container>
         </header>
     );
