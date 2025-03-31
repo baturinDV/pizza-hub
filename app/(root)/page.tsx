@@ -1,4 +1,4 @@
-import { Container, Title, TopBar, Filters } from "@/shared/components/shared";
+import { Container, Title, TopBar, Filters, Stories } from "@/shared/components/shared";
 import { ProductsGroupList } from "@/shared/components/shared/products-group-list";
 import { prisma } from "@/prisma/prisma client";
 import { Suspense } from "react";
@@ -10,8 +10,8 @@ export default async function Home({searchParams}: {searchParams: GetSearchParam
   return <>
     <Container className="mt-10">
       <Title text="Один продукт тебе? Или два другому!?" size="lg" className="font-extrabold"/>
-
     </Container>
+    <Stories />
     <TopBar categories={categories.filter((category) => category.products.length > 0)}/>
     <Container className="mt-10 pb-14">
       <div className="flex gap-[80px]">
