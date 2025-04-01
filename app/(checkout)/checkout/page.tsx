@@ -4,10 +4,9 @@ import { useCart } from "@/shared/hooks";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckoutFormValues, checkoutFormSchema } from "@/shared/constants";
-import { cn } from "@/shared/lib/utils";
 import { createOrder } from "@/app/actions";
 import toast from "react-hot-toast";
-import React from "react";
+import React, { Suspense } from "react";
 import { useSession } from "next-auth/react";
 import { Api } from "@/shared/services/api-client";
 
@@ -29,6 +28,7 @@ export default function CheckoutPage() {
     },
   });
 
+  /* eslint-disable-next-line react-hooks/exhaustive-deps */
   React.useEffect(() => {
     async function fetchUserInfo() {
       const data = await Api.auth.getMe();
@@ -42,7 +42,7 @@ export default function CheckoutPage() {
     if(session) {
       fetchUserInfo();
     }
-  }, [session])
+  }, [session, form])
 
   const onSubmit = async (data: CheckoutFormValues) => {
     try {
