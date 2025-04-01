@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckoutFormValues, checkoutFormSchema } from "@/shared/constants";
 import { createOrder } from "@/app/actions";
 import toast from "react-hot-toast";
-import React, { Suspense } from "react";
+import React, { Suspense } from "react"; 
 import { useSession } from "next-auth/react";
 import { Api } from "@/shared/services/api-client";
 
@@ -57,7 +57,7 @@ export default function CheckoutPage() {
         location.href = url;
       }
     } catch (error) {
-        console.log(error);
+        console.log(error); 
         setSubmitting(false);
         toast.error('Неверный E-Mail или пароль', {
           icon: '❌',

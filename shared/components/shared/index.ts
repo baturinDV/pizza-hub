@@ -34,4 +34,5 @@ export * from './email-templates';
 export * from './form';
 export * from './modals';
 export * from './checkout';
+export * from './dashboard';
 
