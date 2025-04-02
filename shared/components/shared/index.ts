@@ -30,6 +30,8 @@ export {ProfileButton} from './profile-button';
 export {InfoBlock} from './info-block';
 export {ProfileForm} from './profile-form';
 export {Stories} from './stories';
+export {DashboardButton} from './dashboard-button';
+export {DashboardCartDrawer} from './dashboard-cart-drawer';
 export * from './email-templates';
 export * from './form';
 export * from './modals';

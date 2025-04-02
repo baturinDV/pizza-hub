@@ -1,5 +1,5 @@
-'use client'
-import React from 'react';
+'use client';
+import React, { useEffect, useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Container } from './container';
 import { SearchInput } from './search-input';
@@ -11,6 +11,8 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import { DashboardButton } from '.';
+import { Api } from '@/shared/services/api-client';
 
 interface Props {
     hasSearch?: boolean;
@@ -18,11 +20,23 @@ interface Props {
     className?: string;
 }
 
-export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, className}) => {
+export const Header: React.FC<Props> = async ({ hasSearch = true, hasCart = true, className}) => {
     const router = useRouter();
     const [openAuthModel, setOpenAuthModel] = React.useState(false);
     const searchParams = useSearchParams();
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    async function fetchIsAdmin() {
+        const response = await Api.checkAuth.isAdmin();
+        setIsAdmin(response.isAdmin);
+    }
+
+    useEffect(() => {
+        fetchIsAdmin();
+    }, []);
+
     React.useEffect(() => {
+        
         let toastMessage = '';
 
         if (searchParams.has('verified')) {
@@ -42,6 +56,8 @@ export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, clas
         }, 1000);
         }
     }, [])
+
+    
 
     return (
         <header className={cn("border-b", className)}>
@@ -70,6 +86,7 @@ export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, clas
 
                     <AuthModel open={openAuthModel} onClose={() => setOpenAuthModel(false)} /> 
                     <ProfileButton onClickOpenModel={() => setOpenAuthModel(true)}  /> 
+                    {isAdmin && <DashboardButton />}
                     {hasCart && <CartButton />}
                 </div>
             </Container>

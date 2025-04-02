@@ -70,7 +70,7 @@ export const DashboardMenu: React.FC<Props> = ({ className }) => {
           className={cn(
             'flex gap-3 rounded-[8px] px-3 py-2 text-gray-900 transition-all',
             'hover:text-primary p-2 px-4 cursor-pointer rounded-md',
-            'text-xl' // Увеличиваем размер шрифта
+            'text-xl'
           )}
           href={item.href}
         >

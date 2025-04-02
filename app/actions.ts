@@ -5,7 +5,7 @@ import { PayOrderTemplate, VerificationUser } from "@/shared/components";
 import { CheckoutFormValues } from "@/shared/constants";
 import { createPayment, sendEmail } from "@/shared/lib";
 import { getUserSession } from "@/shared/lib/get-user-session";
-import { OrderStatus, Prisma } from "@prisma/client";
+import { OrderStatus, Prisma, UserRole } from "@prisma/client";
 import { hashSync } from "bcrypt";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
