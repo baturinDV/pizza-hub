@@ -8,11 +8,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { FormInput } from '@/shared/components/shared/form';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+
 interface Props {
     onClose?: VoidFunction;
   }
   
   export const LoginForm: React.FC<Props> = ({ onClose }) => {
+    const router = useRouter();
     const form = useForm<TFormLoginValues>({
       resolver: zodResolver(formLoginSchema),
       defaultValues: {
@@ -22,7 +25,7 @@ interface Props {
     });
   
     const onSubmit = async (data: TFormLoginValues) => {
-        try {
+      try {
           const resp = await signIn('credentials', {
             ...data,
             redirect: false,
@@ -32,10 +35,12 @@ interface Props {
             throw Error();
           }
 
+         // window.location.reload();
+
           toast.success('Вы успешно вошли в аккаунт', {
             icon: '✅',
           })
-    
+
           onClose?.();
         } catch (error) {
           console.log('Error [LOGIN]', error);

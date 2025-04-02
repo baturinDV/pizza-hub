@@ -20,7 +20,7 @@ interface Props {
     className?: string;
 }
 
-export const Header: React.FC<Props> = async ({ hasSearch = true, hasCart = true, className}) => {
+export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, className}) => {
     const router = useRouter();
     const [openAuthModel, setOpenAuthModel] = React.useState(false);
     const searchParams = useSearchParams();
@@ -84,9 +84,9 @@ export const Header: React.FC<Props> = async ({ hasSearch = true, hasCart = true
                 <div className="flex items-center gap-3">
                     {/* Можно отобразить скелетон при загрузке */}
 
+                    {isAdmin && <DashboardButton />}
                     <AuthModel open={openAuthModel} onClose={() => setOpenAuthModel(false)} /> 
                     <ProfileButton onClickOpenModel={() => setOpenAuthModel(true)}  /> 
-                    {isAdmin && <DashboardButton />}
                     {hasCart && <CartButton />}
                 </div>
             </Container>
