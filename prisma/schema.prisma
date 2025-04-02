@@ -127,6 +127,7 @@ model Order {
   token String
 
   status      OrderStatus
+  resultStatus      ReadyStatus   @default(NEW)
   totalAmount Int
   paymentId   String?
 
@@ -165,6 +166,15 @@ enum UserRole {
   USER
   ADMIN
 }
+
+enum ReadyStatus {
+  NEW
+  INPROGRES
+  READY
+  CANCELLED
+  COMPLETED
+}
+
 
 model Story {
   id              Int    @id @default(autoincrement())

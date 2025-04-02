@@ -5,7 +5,7 @@ import { PayOrderTemplate, VerificationUser } from "@/shared/components";
 import { CheckoutFormValues } from "@/shared/constants";
 import { createPayment, sendEmail } from "@/shared/lib";
 import { getUserSession } from "@/shared/lib/get-user-session";
-import { OrderStatus, Prisma, UserRole } from "@prisma/client";
+import { OrderStatus, Prisma, ReadyStatus, UserRole } from "@prisma/client";
 import { hashSync } from "bcrypt";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -201,6 +201,22 @@ export async function updateUser(id: number, data: Prisma.UserUpdateInput) {
     });
   } catch (error) {
     console.log('Error [UPDATE_USER]', error);
+    throw error;
+  }
+}
+
+export async function updateReadyStatusOrder(id: number, readyStatus: ReadyStatus) {
+  try {
+    await prisma.order.update({
+      where: {
+        id,
+      },
+      data: {
+        resultStatus: readyStatus,
+      },
+    });
+  } catch (error) {
+    console.log('Error [UPDATE_ORDERREADYSTATUS]', error);
     throw error;
   }
 }

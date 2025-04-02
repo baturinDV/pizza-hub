@@ -4,17 +4,16 @@ import React from 'react';
 import { Folder, LayoutDashboard, Leaf, Package, ShoppingCart, Users } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/shared/lib/utils';
-import { usePathname } from 'next/navigation';
 
 interface Props {
   className?: string;
+  onSelect?: () => void; // Добавляем prop для колбэка при выборе
 }
 
 function isSubPath(subPath: string, parentPath: string) {
   if (subPath === '/dashboard' && parentPath === '/dashboard') {
     return true;
   }
-
   return subPath !== '/dashboard' && (subPath === parentPath || parentPath.startsWith(subPath));
 }
 
@@ -51,9 +50,7 @@ const items = [
   },
 ];
 
-export const DashboardMenu: React.FC<Props> = ({ className }) => {
-  const pathname = usePathname();
-
+export const DashboardMenu: React.FC<Props> = ({ className, onSelect }) => {
   return (
     <nav
       className={cn(
@@ -73,6 +70,11 @@ export const DashboardMenu: React.FC<Props> = ({ className }) => {
             'text-xl'
           )}
           href={item.href}
+          onClick={() => { // Добавляем обработчик клика
+            if (onSelect) {
+                onSelect(); // Вызываем переданный метод для закрытия
+            }
+          }}
         >
           {item.icon}
           {item.text}
