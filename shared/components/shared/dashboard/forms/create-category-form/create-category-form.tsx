@@ -1,39 +1,51 @@
 'use client';
-
 import React from 'react';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-
 import { FormInput } from '@/shared/components/shared/form/form-input';
-import type { Category } from '@prisma/client';
 import { CreateCategoryFormSchema, CreateCategoryFormValues } from './constants';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { createCategory, updateCategory } from '@/app/actions';
 import { DashboardFormHeader } from '../../dashboard-form-header';
+import { useCategoryAdminStore } from '@/shared/store';
+import { Button } from '@/shared/components';
 
-interface Props {
-  values?: Category;
-}
-
-export const CreateCategoryForm: React.FC<Props> = ({ values }) => {
-  const params = useParams<{ id: string }>();
+export const CreateCategoryForm: React.FC = () => {
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
 
+  const activeCategory = useCategoryAdminStore((state) => state.activeCategory);
+  const params = activeCategory?.id || null;
+  
   const form = useForm<CreateCategoryFormValues>({
     defaultValues: {
-      name: values?.name || '',
+      name: activeCategory?.name,
     },
+
     resolver: zodResolver(CreateCategoryFormSchema),
   });
+
+  // useEffect для обновления значений формы при изменении activeCategory
+  React.useEffect(() => {
+    if (activeCategory) {
+      form.reset({
+        name: activeCategory.name,
+      });
+    }
+    else {
+      form.reset({
+        name: "",
+      });
+    }
+  }, [activeCategory, form]);
 
   const onSubmit: SubmitHandler<CreateCategoryFormValues> = async (data) => {
     try {
       setLoading(true);
 
-      if (params.id) {
-        await updateCategory(+params.id, data);
+      if (params != null) {
+        await updateCategory(params, data);
       } else {
         await createCategory(data);
         router.push('/dashboard/categories');
@@ -51,7 +63,7 @@ export const CreateCategoryForm: React.FC<Props> = ({ values }) => {
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <DashboardFormHeader isEdit={!!values} loading={loading} />
+        <DashboardFormHeader isEdit={activeCategory != null} loading={loading} />
         <div className="border shadow-sm rounded-lg grid grid-cols-2 gap-5 p-5">
           <FormInput name="name" label="Название категории" required />
         </div>

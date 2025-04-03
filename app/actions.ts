@@ -249,12 +249,13 @@ export async function deleteUser(id: number) {
 
 export async function updateCategory(id: number, data: Prisma.CategoryUpdateInput) {
   try {
-    await prisma.category.update({
+    const updatedCategory = await prisma.category.update({
       where: {
         id,
       },
       data,
     });
+    return updatedCategory;
   } catch (error) {
     console.log('Error [UPDATE_CATEGORY]', error);
     throw error;
@@ -277,7 +278,7 @@ export async function createCategory(data: Prisma.CategoryCreateInput) {
 export async function deleteCategory(id: number) {
   await prisma.category.delete({
     where: {
-      id,
+      id: id,
     },
   });
 

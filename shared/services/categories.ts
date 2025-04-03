@@ -1,3 +1,4 @@
+import { Category } from '@prisma/client';
 import { axiosInstance } from './instance';
 
 export const getAllCategories = async () => {

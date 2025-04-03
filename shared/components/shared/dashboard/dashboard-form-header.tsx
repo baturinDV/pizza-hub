@@ -1,5 +1,7 @@
+'use client'
 import { Button } from '@/shared/components/ui/button';
 import { cn } from '@/shared/lib/utils';
+import { useCategoryAdminStore } from '@/shared/store';
 import React from 'react';
 
 interface Props {
