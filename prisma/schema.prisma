@@ -73,7 +73,7 @@ model ProductItem {
 }
 
 model Ingredient {
-  id Int @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
 
   name     String
   price    Int

@@ -5,56 +5,60 @@ import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { FormInput } from "@/shared/components/shared/form/form-input";
-import { useRouter, useParams } from "next/navigation";
-import {
-  createIngredient,
-  updateIngredient,
-} from "@/app/actions";
 import toast from "react-hot-toast";
 import { DashboardFormHeader } from "../../dashboard-form-header";
-import { Ingredient, Product } from "@prisma/client";
-import { Trash2 } from "lucide-react";
-import { UploadButton } from "@/shared/lib/uploadthing";
+import { Ingredient} from "@prisma/client";
 import {
   CreateIngredientFormSchema,
   CreateIngredientFormValues,
 } from "@/shared/components/shared/dashboard/forms/create-ingredient-form/constants";
+import { useIngredientAdminStore, useIngredientsUpdateStore } from "@/shared/store";
+import { createIngredient2, updateIngredient } from "@/app/actions";
 
 interface Props {
   values?: Ingredient;
 }
 
 export const CreateIngredientForm: React.FC<Props> = ({ values }) => {
-  const params = useParams<{ id: string }>();
-  const router = useRouter();
+  const activeIngredient = useIngredientAdminStore((state) => state.activeIngredient);
+  const params = activeIngredient?.id || null;
+  const setIsIngredientsUpdate = useIngredientsUpdateStore((state) => state.setIsingredientsUpdate);
   const [loading, setLoading] = React.useState(false);
 
   const form = useForm<CreateIngredientFormValues>({
     defaultValues: {
       name: values?.name || "",
       imageUrl: values?.imageUrl || "",
-      price: values?.price ? String(values?.price) : "",
+      //price: values?.price ? values?.price : 0,
     },
     resolver: zodResolver(CreateIngredientFormSchema),
   });
+
+  React.useEffect(() => {
+      if (activeIngredient) {
+        form.reset({
+          name: activeIngredient.name,
+          imageUrl: activeIngredient.imageUrl,
+          price:activeIngredient.price,
+        });
+      }
+      else {
+        form.reset({
+          name: "",
+          imageUrl: "",
+          //price: 0,
+        });
+      }
+    }, [activeIngredient, form]);
 
   const onSubmit: SubmitHandler<CreateIngredientFormValues> = async (data) => {
     try {
       setLoading(true);
 
-      const fields = {
-        ...data,
-        price: Number(data.price || 0),
-        name: String(data.name || ""),
-        imageUrl: String(data.imageUrl || ""),
-      };
-
-      if (params.id) {
-        await updateIngredient(+params.id, fields);
+      if (params != null) {
+        await updateIngredient(params, data);
       } else {
-
-        await createIngredient(fields);
-        router.push("/dashboard/ingredients");
+        await createIngredient2(data);
       }
 
       console.log(data);
@@ -63,65 +67,28 @@ export const CreateIngredientForm: React.FC<Props> = ({ values }) => {
       toast.error("Произошла ошибка");
     } finally {
       setLoading(false);
+      setIsIngredientsUpdate(true);
+      form.reset({
+        name: "",
+        imageUrl: "",
+        //price: 0,
+      });
     }
   };
-
-  const onUploadSuccess = (url: string) => {
-    form.setValue("imageUrl", url);
-    toast.success("Файл успешно загружена!", {
-      icon: "👏",
-    });
-  };
-
-  const onUploadError = (error: Error) => {
-    console.log(error);
-    toast.error("Не удалось загрузить файл", {
-      icon: "😩",
-    });
-  };
-
-  const onClickRemoveImage = () => {
-    form.setValue("imageUrl", "");
-  };
-
-  const imageUrl = form.watch("imageUrl");
 
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <DashboardFormHeader isEdit={!!values} loading={loading} />
+        <DashboardFormHeader isEdit={activeIngredient != null} loading={loading} />
         <div className="flex items-center border shadow-sm rounded-lg grid grid-cols-2 gap-5 p-5">
           <div>
             <FormInput name="name" label="Название" required />
             <FormInput name="price" label="Цена" required />
+            <FormInput name="imageUrl" label="Ссылка на изображение" required />
           </div>
-
-          {imageUrl ? (
-            <div className="relative w-40 h-40">
-              <img className="object-cover rounded" src={imageUrl} />
-              <button
-                onClick={onClickRemoveImage}
-                className="absolute top-2 right-2 bg-red-600 rounded-sm p-2"
-              >
-                <Trash2 className="w-4 h-4 text-white" />
-              </button>
-            </div>
-          ) : (
-            <div>
-              <UploadButton
-                endpoint="imageUploader"
-                onClientUploadComplete={(res) => onUploadSuccess(res[0].url)}
-                onUploadError={onUploadError}
-              />
-              {form.formState.errors.imageUrl && (
-                <p className="text-red-500 text-sm mt-2">
-                  {form.formState.errors.imageUrl.message}
-                </p>
-              )}
-            </div>
-          )}
         </div>
       </form>
     </FormProvider>
   );
 };
+

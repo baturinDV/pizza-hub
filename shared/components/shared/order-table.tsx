@@ -19,7 +19,7 @@ export const OrderTable: React.FC = () => {
         const fetchOrders = async () => {
             try {
                 const response = await Api.orders.getAllOrders();
-                setOrders(response); // Здесь предполагается, что response.data - это массив
+                setOrders(response); 
             } catch (error) {
                 console.error("Ошибка при получении заказов:", error);
             } finally {

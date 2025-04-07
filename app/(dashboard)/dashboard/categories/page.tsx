@@ -5,33 +5,35 @@ import { Api } from "@/shared/services/api-client";
 import { CreateCategoryForm } from "@/shared/components/shared/dashboard/forms/create-category-form/create-category-form";
 import toast from "react-hot-toast";
 import { Category } from "@prisma/client";
-import { useCategoryAdminStore } from "@/shared/store";
-import router from "next/router";
+import { useCategoryAdminStore, useCategoriesUpdateStore } from "@/shared/store";
 
 
-export default function DashboardCategoriesPage() {
+export default  function DashboardCategoriesPage() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(false);
 
     const setActiveCategory = useCategoryAdminStore((state) => state.setActiveCategory);
+    const setIsCategoriesUpdate = useCategoriesUpdateStore((state) => state.setIsCategoriesUpdate);
+    const isCategoriesUpdate = useCategoriesUpdateStore((state) => state.isCategoriesUpdate);
     const activeCategory = useCategoryAdminStore((state) => state.activeCategory);
-    useEffect(() => {
-      async function fetchCategories() {
-          setLoading(true); // Устанавливаем состояние загрузки
-          try {
-              const response = await Api.categories.getAllCategories();
-              setCategories(response); // Предполагается, что response - это массив категорий
-          } catch (error) {
-              console.error('Ошибка при загрузке категорий:', error);
-              toast.error('Не удалось загрузить категории'); // Уведомление об ошибке
-          } finally {
-              setLoading(false); // Отключаем состояние загрузки
-          }
-      }
-      setActiveCategory(null);
-      fetchCategories();
-  }, []);
+    async function fetchCategories() {
+        setLoading(true); // Устанавливаем состояние загрузки
+        try {
+            const response = await Api.categories.getAllCategories();
+            setCategories(response); // Предполагается, что response - это массив категорий
+        } catch (error) {
+            console.error('Ошибка при загрузке категорий:', error);
+            toast.error('Не удалось загрузить категории'); // Уведомление об ошибке
+        } finally {
+            setLoading(false); // Отключаем состояние загрузки
+        }
+    }
 
+    useEffect(() => {
+        setActiveCategory(null);
+        fetchCategories();
+        setIsCategoriesUpdate(false); 
+    }, [isCategoriesUpdate]);
 
   return (
     <Container className="mt-10 p-4 md:p-8 lg:p-10">

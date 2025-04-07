@@ -4,19 +4,20 @@ import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormInput } from '@/shared/components/shared/form/form-input';
 import { CreateCategoryFormSchema, CreateCategoryFormValues } from './constants';
-import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { createCategory, updateCategory } from '@/app/actions';
 import { DashboardFormHeader } from '../../dashboard-form-header';
-import { useCategoryAdminStore } from '@/shared/store';
-import { Button } from '@/shared/components';
+import { useCategoryAdminStore, useCategoriesUpdateStore } from "@/shared/store";
+
+
+
 
 export const CreateCategoryForm: React.FC = () => {
-  const router = useRouter();
   const [loading, setLoading] = React.useState(false);
 
   const activeCategory = useCategoryAdminStore((state) => state.activeCategory);
   const params = activeCategory?.id || null;
+  const setIsCategoriesUpdate = useCategoriesUpdateStore((state) => state.setIsCategoriesUpdate);
   
   const form = useForm<CreateCategoryFormValues>({
     defaultValues: {
@@ -45,10 +46,9 @@ export const CreateCategoryForm: React.FC = () => {
       setLoading(true);
 
       if (params != null) {
-        await updateCategory(params, data);
+        await updateCategory(params, data)
       } else {
         await createCategory(data);
-        router.push('/dashboard/categories');
       }
 
       console.log(data);
@@ -57,6 +57,10 @@ export const CreateCategoryForm: React.FC = () => {
       toast.error('Произошла ошибка');
     } finally {
       setLoading(false);
+      setIsCategoriesUpdate(true);
+      form.reset({
+        name: "",
+      });
     }
   };
 
@@ -65,7 +69,7 @@ export const CreateCategoryForm: React.FC = () => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <DashboardFormHeader isEdit={activeCategory != null} loading={loading} />
         <div className="border shadow-sm rounded-lg grid grid-cols-2 gap-5 p-5">
-          <FormInput name="name" label="Название категории" required />
+          <FormInput name="name" label="Название категории" required/>
         </div>
       </form>
     </FormProvider>

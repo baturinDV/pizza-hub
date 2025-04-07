@@ -336,15 +336,14 @@ export async function updateIngredient(id: number, data: Prisma.IngredientUpdate
   }
 }
 
-export async function createIngredient(data: Prisma.IngredientCreateInput) {
+export async function createIngredient2(data: Prisma.IngredientCreateInput) {
+  console.log("mbds");
   try {
+    console.log(data);
+    /*
     await prisma.ingredient.create({
-      data: {
-        name: data.name,
-        imageUrl: data.imageUrl,
-        price: data.price,
-      },
-    });
+      data,
+    }); */
 
     revalidatePath('/dashboard/ingredients');
   } catch (error) {
