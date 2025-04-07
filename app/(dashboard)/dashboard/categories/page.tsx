@@ -7,6 +7,9 @@ import toast from "react-hot-toast";
 import { Category } from "@prisma/client";
 import { useCategoryAdminStore, useCategoriesUpdateStore } from "@/shared/store";
 
+// Определение стилей, чтобы избежать повторений
+const rowClasses = "py-4 px-2 border-b border-orange-500 text-center"; // Центрируем текст
+const selectClasses = "border border-orange-500 rounded p-1 w-full"; // Ширина select на 100%
 
 export default  function DashboardCategoriesPage() {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -34,7 +37,7 @@ export default  function DashboardCategoriesPage() {
         fetchCategories();
         setIsCategoriesUpdate(false); 
     }, [isCategoriesUpdate]);
-
+ 
   return (
     <Container className="mt-10 p-4 md:p-8 lg:p-10">
         <div className="flex items-center space-x-4 mb-8">
@@ -49,36 +52,41 @@ export default  function DashboardCategoriesPage() {
 
         { <CreateCategoryForm />}
 
-        <div className="mt-8">
-            <h2 className="text-xl font-bold mb-4">Список категорий</h2> 
-            <ul className="space-y-4">
-                {categories.map(category => (
-                    <li 
-                        onClick={() => {
-                            setActiveCategory(category);
-                        }}  
-                        key={category.id} 
-                        className="flex justify-between items-center border-b py-4 px-2 hover:bg-gray-50 rounded-lg transition duration-200"
-                    >
-                        <span className="text-lg font-medium">{category.name}</span>
-                        <div className="flex items-center space-x-2">
-                        <Button 
-                            loading={loading} 
-                            onClick={() => {setActiveCategory(category)}} 
-                            className={activeCategory?.id === category.id ? "bg-gray-500 text-white" : "bg-orange-600 text-white"}
-                        >
-                            Редактировать
-                        </Button>
-                            <DeleteButton 
-                                id={category.id} 
-                                type="category" 
-                                className="ml-2" 
-                            />
-                        </div>
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <div className="p-6 overflow-auto">
+                    <table className="min-w-full bg-white border border-orange-500">
+                        <thead>
+                            <tr className="bg-orange-500 text-white">
+                                <th className={rowClasses}>ID</th>
+                                <th className={rowClasses}>Наименование</th>
+                                <th className={rowClasses}>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {categories.map((category) => (
+                                <tr key={category.id} className="hover:bg-orange-100">
+                                    <td className={rowClasses}>{category.id}</td>
+                                    <td className={rowClasses}>{category.name}</td>
+                                    <td className={rowClasses}>
+                                        <div className="flex flex-wrap justify-center gap-2">
+                                            <Button 
+                                                loading={loading} 
+                                                onClick={() => {setActiveCategory(category)}} 
+                                                className={activeCategory?.id === category.id ? "bg-gray-500 text-white" : "bg-orange-600 text-white"}
+                                            >
+                                            Редактировать
+                                            </Button>
+                                            <DeleteButton 
+                                                id={category.id} 
+                                                type="category" 
+                                                className="ml-2" 
+                                            />
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
     </Container>
 );
 }

@@ -13,7 +13,7 @@ import { CreateIngredientForm } from "@/shared/components/shared/dashboard/forms
 const rowClasses = "py-4 px-2 border-b border-orange-500 text-center"; // Центрируем текст
 const selectClasses = "border border-orange-500 rounded p-1 w-full"; // Ширина select на 100%
 
-export default  function DashboardIngredientsPage() {
+export default  function DashboardIngredientsPage() { 
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [loading, setLoading] = useState(false);
     const setActiveIngredient = useIngredientAdminStore((state) => state.setActiveIngredient);

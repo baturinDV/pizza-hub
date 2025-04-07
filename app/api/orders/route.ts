@@ -18,6 +18,7 @@ export async function GET() {
         address: true, 
         email: true,
         comment: true, 
+        items: true,
     },
     });
 

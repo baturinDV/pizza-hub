@@ -10,4 +10,6 @@ export interface Order {
     email: string; 
     comment: string; 
     createdAt: string; 
+    items: JSON;
+    
 }
