@@ -5,7 +5,7 @@ import { PayOrderTemplate, VerificationUser } from "@/shared/components";
 import { CheckoutFormValues } from "@/shared/constants";
 import { createPayment, sendEmail } from "@/shared/lib";
 import { getUserSession } from "@/shared/lib/get-user-session";
-import { OrderStatus, Prisma, ReadyStatus, UserRole } from "@prisma/client";
+import { OrderStatus, Prisma, ReadyStatus } from "@prisma/client";
 import { hashSync } from "bcrypt";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -336,14 +336,12 @@ export async function updateIngredient(id: number, data: Prisma.IngredientUpdate
   }
 }
 
-export async function createIngredient2(data: Prisma.IngredientCreateInput) {
-  console.log("mbds");
+export async function createIngredient( data: Prisma.IngredientCreateInput) {
   try {
-    console.log(data);
-    /*
+    
     await prisma.ingredient.create({
       data,
-    }); */
+    }); 
 
     revalidatePath('/dashboard/ingredients');
   } catch (error) {

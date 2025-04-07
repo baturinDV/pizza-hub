@@ -107,7 +107,7 @@ export const ingredients = [
       imageUrl:
         'https://cdn.dodostatic.net/static/Img/Ingredients/b2f3a5d5afe44516a93cfc0d2ee60088.png',
     },
-].map((obj, index) => ({ id: index + 1, ...obj })); // каждому элементу добавляем id
+]
  
 export const products = [
     {

@@ -13,7 +13,7 @@ import {
   CreateIngredientFormValues,
 } from "@/shared/components/shared/dashboard/forms/create-ingredient-form/constants";
 import { useIngredientAdminStore, useIngredientsUpdateStore } from "@/shared/store";
-import { createIngredient2, updateIngredient } from "@/app/actions";
+import { createIngredient, updateIngredient } from "@/app/actions";
 
 interface Props {
   values?: Ingredient;
@@ -29,7 +29,6 @@ export const CreateIngredientForm: React.FC<Props> = ({ values }) => {
     defaultValues: {
       name: values?.name || "",
       imageUrl: values?.imageUrl || "",
-      //price: values?.price ? values?.price : 0,
     },
     resolver: zodResolver(CreateIngredientFormSchema),
   });
@@ -46,7 +45,6 @@ export const CreateIngredientForm: React.FC<Props> = ({ values }) => {
         form.reset({
           name: "",
           imageUrl: "",
-          //price: 0,
         });
       }
     }, [activeIngredient, form]);
@@ -58,7 +56,7 @@ export const CreateIngredientForm: React.FC<Props> = ({ values }) => {
       if (params != null) {
         await updateIngredient(params, data);
       } else {
-        await createIngredient2(data);
+        await createIngredient(data);
       }
 
       console.log(data);
@@ -71,7 +69,7 @@ export const CreateIngredientForm: React.FC<Props> = ({ values }) => {
       form.reset({
         name: "",
         imageUrl: "",
-        //price: 0,
+
       });
     }
   };
