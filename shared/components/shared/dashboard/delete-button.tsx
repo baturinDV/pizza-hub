@@ -8,7 +8,7 @@ import {
   deleteUser,
 } from '@/app/actions';
 import { Button } from '@/shared/components/ui/button';
-import { useCategoriesUpdateStore, useIngredientsUpdateStore } from '@/shared/store';
+import { useCategoriesUpdateStore, useIngredientsUpdateStore, useProductsUpdateStore } from '@/shared/store';
 import { Trash2 } from 'lucide-react';
 import React from 'react';
 
@@ -22,6 +22,7 @@ interface Props {
 export const DeleteButton: React.FC<Props> = ({ id, type, className }) => {
   const setIsCategoriesUpdate = useCategoriesUpdateStore((state) => state.setIsCategoriesUpdate);
   const setIsIngredientsUpdate = useIngredientsUpdateStore((state) => state.setIsingredientsUpdate);
+  const setIsProductsUpdate = useProductsUpdateStore((state) => state.setIsProductsUpdate);
   const onClickRemove = async (id: number) => {
     if (type === 'user') {
       await deleteUser(id);
@@ -30,6 +31,7 @@ export const DeleteButton: React.FC<Props> = ({ id, type, className }) => {
       setIsCategoriesUpdate(true)
     } else if (type === 'product') {
       await deleteProduct(id);
+      setIsProductsUpdate(true)
     } else if (type === 'ingredient') {
       await deleteIngredient(id);
       setIsIngredientsUpdate(true)

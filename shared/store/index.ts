@@ -4,3 +4,5 @@ export * from './cart';
 export * from './categoryAdmin';
 export * from './categoriesUpdate';
 export * from './ingredientsUpdate';
+export * from './productAdmin';
+export * from './productsUpdate';

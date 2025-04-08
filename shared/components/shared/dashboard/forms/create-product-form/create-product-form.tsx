@@ -99,7 +99,7 @@ export const CreateProductForm: React.FC<Props> = ({ values }) => {
             <div className="relative w-40 h-40">
               <img className="object-cover rounded" src={imageUrl} />
               <button
-                onClick={onClickRemoveImage}
+                onClick={onClickRemoveImage} 
                 className="absolute top-2 right-2 bg-red-600 rounded-sm p-2"
               >
                 <Trash2 className="w-4 h-4 text-white" />
