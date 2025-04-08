@@ -36,7 +36,7 @@ export const TopBar: React.FC<Props> = ({ categories,className}) => {
       <Container className="flex items-center justify-between ">
         <Categories items={categories} />
         <div className="flex items-center">
-          <SortPopup />
+          {/*<SortPopup />*/}
           <CartButton
             className={cn(
               'transition-all',

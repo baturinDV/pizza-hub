@@ -44,7 +44,7 @@ export default  function DashboardIngredientsPage() {
     <Container className="mt-10 p-4 md:p-8 lg:p-10">
         <div className="flex items-center space-x-4 mb-8">
             <Title
-                text="Панель администратора для категорий" 
+                text="Панель администратора для ингредиентов" 
                  className="text-left font-extrabold mb-0 text-2xl md:text-3xl lg:text-4xl"
             />      
             {activeIngredient != null && <Button loading={loading} onClick={() => {setActiveIngredient(null)}}>Создать</Button>}
