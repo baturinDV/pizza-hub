@@ -32,7 +32,7 @@ export const FormSelect: React.FC<Props> = ({
     formState: { errors },
   } = useFormContext();
 
-  const errotText = errors?.[name]?.message as string;
+  const errorText = errors?.[name]?.message as string;
 
   return (
     <Controller
@@ -44,7 +44,8 @@ export const FormSelect: React.FC<Props> = ({
             {label} {required && <RequiredSymbol />}
           </p>
 
-          <Select onValueChange={field.onChange} defaultValue={field.value} {...props}>
+          <Select onValueChange={field.onChange} value={field.value} {...props}>
+            {/* Используем value вместо defaultValue */}
             <SelectTrigger className="h-12">
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
@@ -57,7 +58,7 @@ export const FormSelect: React.FC<Props> = ({
             </SelectContent>
           </Select>
 
-          {errotText && <ErrorText text={errotText} />}
+          {errorText && <ErrorText text={errorText} />}
         </div>
       )}
     />

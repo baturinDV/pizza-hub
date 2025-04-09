@@ -285,21 +285,29 @@ export async function deleteCategory(id: number) {
   revalidatePath('/dashboard/categories');
 }
 
-export async function updateProduct(id: number, data: Prisma.ProductUpdateInput) {
+export async function updateProduct(
+  id: number,
+  data: Prisma.ProductUncheckedUpdateInput
+) {
   try {
     await prisma.product.update({
-      where: {
-        id,
+      where: { id },
+      data: {
+        ...data,
+        ingredients: {
+          set: (data.ingredients as { connect: Array<{ id: number }> }).connect,
+        },
       },
-      data,
     });
+
+    revalidatePath('/dashboard/products');
   } catch (error) {
     console.log('Error [UPDATE_PRODUCT]', error);
     throw error;
   }
 }
 
-export async function createProduct(data: Prisma.ProductCreateInput) {
+export async function createProduct(data: Prisma.ProductUncheckedCreateInput) {
   try {
     await prisma.product.create({
       data,

@@ -31,7 +31,7 @@ export default  function DashboardIngredientsPage() {
         } finally {
             setLoading(false); 
         }
-    }
+    } 
 
     useEffect(() => {
         setActiveIngredient(null);

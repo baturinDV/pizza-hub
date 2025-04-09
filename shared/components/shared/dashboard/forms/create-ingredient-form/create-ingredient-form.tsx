@@ -18,7 +18,7 @@ import { createIngredient, updateIngredient } from "@/app/actions";
 interface Props {
   values?: Ingredient;
 }
-
+ 
 export const CreateIngredientForm: React.FC<Props> = ({ values }) => {
   const activeIngredient = useIngredientAdminStore((state) => state.activeIngredient);
   const params = activeIngredient?.id || null;
@@ -59,7 +59,7 @@ export const CreateIngredientForm: React.FC<Props> = ({ values }) => {
         await createIngredient(data);
       }
 
-      console.log(data);
+
     } catch (error) {
       console.log("Error [CREATE_INGREDIENT]", error);
       toast.error("Произошла ошибка");

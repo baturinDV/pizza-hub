@@ -53,7 +53,7 @@ model Product {
   category   Category @relation(fields: [categoryId], references: [id])
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt 
 }
 
 model ProductItem {

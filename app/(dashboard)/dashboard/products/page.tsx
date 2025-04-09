@@ -18,6 +18,7 @@ export default  function DashboardProductsPage() {
     const newLocal = useState<ProductWithIngredients[]>([]);
     const [products, setProducts] = newLocal;
     const [categories, setCategories] = useState<Category[]>([]);
+    const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [loading, setLoading] = useState(false);
     const setActiveProduct = useProductAdminStore((state) => state.setActiveProduct);
     const setIsProductsUpdate = useProductsUpdateStore((state) => state.setIsProductsUpdate);
@@ -30,12 +31,14 @@ export default  function DashboardProductsPage() {
             setProducts(responseProducts); 
             const responseCategories = await Api.categories.getAllCategories();
             setCategories(responseCategories); 
+            const responseIngredients = await Api.ingredients.getAll();
+            setIngredients(responseIngredients); 
         } catch (error) {
             console.error('Ошибка при загрузке продуктов:', error);
             toast.error('Не удалось загрузить продукты'); 
         } finally {
             setLoading(false); 
-        }
+        } 
     }
 
     useEffect(() => {
@@ -43,6 +46,19 @@ export default  function DashboardProductsPage() {
         fetchProducts();
         setIsProductsUpdate(false); 
     }, [isProductsUpdate]);
+
+
+    useEffect(() => {
+        if (activeProduct) {
+          // Прокручиваем с небольшой задержкой для гарантии обновления DOM
+          setTimeout(() => {
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth" // Плавная прокрутка
+            });
+          }, 200);
+        }
+      }, [activeProduct]); 
   return (
     <Container className="mt-10 p-4 md:p-8 lg:p-10">
         <div className="flex items-center space-x-4 mb-8">
@@ -54,7 +70,7 @@ export default  function DashboardProductsPage() {
         </div>
 
         {loading && <p className="text-center text-gray-600">Загрузка...</p>}
-        { <CreateProductForm />}
+        { <CreateProductForm categories={categories} ingredients={ingredients}/>}
         <div className="p-6 overflow-x-auto">
     <table className="min-w-full bg-white border border-orange-500 table-fixed">
         <thead>
@@ -85,8 +101,9 @@ export default  function DashboardProductsPage() {
                     </td>
                     <td className={rowClasses}>
                         <div className="flex flex-wrap justify-center gap-2">
-                            <Button loading={loading} onClick={() => {setActiveProduct(product)}}>Редактировать</Button>
-                            <DeleteButton id={product.id} type="ingredient" />
+                             <Button loading={loading} onClick={() => {setActiveProduct(product)}} 
+                                className={activeProduct?.id === product.id ? "bg-gray-500 text-white" : "bg-orange-600 text-white"}>Редактировать</Button>
+                            <DeleteButton id={product.id} type="product" />
                         </div>
                     </td>
                 </tr>
