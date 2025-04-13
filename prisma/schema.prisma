@@ -171,6 +171,7 @@ enum ReadyStatus {
   NEW
   INPROGRES
   READY
+  INDELIVERY
   CANCELLED
   COMPLETED
 }

@@ -103,6 +103,7 @@ export const OrderTable: React.FC = () => {
                                     <option value={ReadyStatus.NEW}>Новый</option>
                                     <option value={ReadyStatus.INPROGRES}>В процессе</option>
                                     <option value={ReadyStatus.READY}>Готов</option>
+                                    <option value={ReadyStatus.INDELIVERY}>В доставке</option>
                                     <option value={ReadyStatus.COMPLETED}>Завершён</option>
                                     <option value={ReadyStatus.CANCELLED}>Ошибка</option>
                                 </select>
