@@ -6,3 +6,4 @@ export * from './categoriesUpdate';
 export * from './ingredientsUpdate';
 export * from './productAdmin';
 export * from './productsUpdate';
+export * from './isAdmin';

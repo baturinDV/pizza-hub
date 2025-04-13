@@ -60,7 +60,7 @@ export const authOptions: AuthOptions = {
       }),
     ],
     secret: process.env.NEXTAUTH_SECRET,
-    session: {
+    session: { 
       strategy: 'jwt',
     },
     callbacks: {
@@ -89,7 +89,7 @@ export const authOptions: AuthOptions = {
                 id: findUser.id,
               },
               data: {
-                provider: account?.provider,
+                provider: account?.provider,  
                 providerId: account?.providerAccountId,
               },
             });
@@ -113,6 +113,7 @@ export const authOptions: AuthOptions = {
           return false;
         }
       },
+      
       async jwt({ token }) {
   
         if(!token.email){

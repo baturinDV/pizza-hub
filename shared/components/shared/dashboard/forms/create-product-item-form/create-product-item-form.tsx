@@ -12,6 +12,8 @@ import { createProductItem, updateProductItem } from '@/app/actions';
 import { DashboardFormHeader } from '../../dashboard-form-header';
 import { CreateProductItemFormSchema, CreateProductItemFormValues } from './constants';
 import { FormSelect } from '@/shared/components/shared/form/form-select';
+import { useProductItemsUpdateStore } from '@/shared/store/productItemsUpdate';
+import { useProductItemAdminStore } from '@/shared/store/productItemAdmin';
 
 interface Props {
   values?: ProductItem;
@@ -19,9 +21,10 @@ interface Props {
 }
 
 export const CreateProductItemForm: React.FC<Props> = ({ values, products }) => {
-  const params = useParams<{ id: string }>();
-  const router = useRouter();
+  const setIsProductItemsUpdate = useProductItemsUpdateStore((state) => state.setIsProductItemsUpdate);
+  const activeProductItem = useProductItemAdminStore((state) => state.activeProductItem);
   const [loading, setLoading] = React.useState(false);
+  const params = activeProductItem?.id || null;
 
   const form = useForm<CreateProductItemFormValues>({
     defaultValues: {
@@ -32,6 +35,26 @@ export const CreateProductItemForm: React.FC<Props> = ({ values, products }) => 
     },
     resolver: zodResolver(CreateProductItemFormSchema),
   });
+
+  React.useEffect(() => {
+
+    if (activeProductItem) {       
+        form.reset({
+        price: activeProductItem?.price ? String(activeProductItem?.price) : '',
+        size: activeProductItem?.size ? String(activeProductItem?.size) : '',
+        pizzaType: activeProductItem?.pizzaType ? String(activeProductItem?.pizzaType) : '',
+        productId: activeProductItem?.productId ? String(activeProductItem?.productId) : '',
+      });
+    }
+    else {
+     form.reset({
+        price: '',
+        size: '',
+        pizzaType: '',
+        productId: '',
+      });
+    }
+  }, [activeProductItem, form]);
 
   const onSubmit: SubmitHandler<CreateProductItemFormValues> = async (data) => {
     try {
@@ -44,11 +67,10 @@ export const CreateProductItemForm: React.FC<Props> = ({ values, products }) => 
         productId: Number(data.productId),
       };
 
-      if (params.id) {
-        await updateProductItem(+params.id, fields);
+      if (params) {
+        await updateProductItem(params, fields);
       } else {
         await createProductItem(fields);
-        router.push('/dashboard/product-items');
       }
 
       console.log(data);
@@ -57,13 +79,20 @@ export const CreateProductItemForm: React.FC<Props> = ({ values, products }) => 
       toast.error('Произошла ошибка');
     } finally {
       setLoading(false);
+      setIsProductItemsUpdate(true);
+      form.reset({
+        price: '',
+        size: '',
+        pizzaType: '',
+        productId: '',
+      });
     }
   };
 
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <DashboardFormHeader isEdit={!!values} loading={loading} />
+        <DashboardFormHeader isEdit={activeProductItem != null} loading={loading} />
         <div className="border shadow-sm rounded-lg grid grid-cols-2 gap-5 p-5">
           <FormInput name="price" label="Цена" required />
           <FormSelect

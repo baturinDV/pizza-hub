@@ -20,6 +20,8 @@ export async function GET(req: any, res: any) {
         fullName: true,
         email: true,
         password: false,
+        role: true,
+        
       },
     });
 

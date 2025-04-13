@@ -31,7 +31,7 @@ export const CreateProductForm: React.FC<Props> = ({ values, categories, ingredi
     const setIsProductsUpdate = useProductsUpdateStore((state) => state.setIsProductsUpdate);
     const [loading, setLoading] = React.useState(false);
 
-  const form = useForm<CreateProductFormValues>({
+  const form = useForm<CreateProductFormValues>({ 
     defaultValues: {
       name: values?.name || "",
       imageUrl: values?.imageUrl || "",

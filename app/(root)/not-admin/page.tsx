@@ -1,12 +1,12 @@
 import { InfoBlock } from "@/shared/components";
 
 
-export default function NotAdminPage() {
+export default function UnauthorizedPage() {
   return (
     <div className="flex flex-col items-center justify-center mt-40">
       <InfoBlock
         title="Доступ запрещён"
-        text="Данную страницу могут просматривать только авторизованные пользователи"
+        text="Данную страницу могут просматривать только администраторы системы"
         imageUrl="/assets/images/lock.png"
       />
     </div>

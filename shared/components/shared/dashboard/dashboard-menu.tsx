@@ -19,11 +19,6 @@ function isSubPath(subPath: string, parentPath: string) {
 
 const items = [
   {
-    text: 'Пользователи',
-    icon: <Users size={16} />,
-    href: '/dashboard/users',
-  },
-  {
     text: 'Категории',
     icon: <Folder size={16} />,
     href: '/dashboard/categories',

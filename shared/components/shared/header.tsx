@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Container } from './container';
 import { SearchInput } from './search-input';
@@ -12,7 +12,7 @@ import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { DashboardButton } from '.';
-import { Api } from '@/shared/services/api-client';
+import { useIsAdminStore } from '@/shared/store';
 
 interface Props {
     hasSearch?: boolean;
@@ -24,16 +24,7 @@ export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, clas
     const router = useRouter();
     const [openAuthModel, setOpenAuthModel] = React.useState(false);
     const searchParams = useSearchParams();
-    const [isAdmin, setIsAdmin] = useState(false);
-
-    async function fetchIsAdmin() {
-        const response = await Api.checkAuth.isAdmin();
-        setIsAdmin(response.isAdmin);
-    }
-
-    useEffect(() => {
-        fetchIsAdmin();
-    }, []);
+    const isAdmin = useIsAdminStore((state) => state.isAdmin);
 
     React.useEffect(() => {
         

@@ -6,8 +6,7 @@ import { Title } from '.';
 import { Order } from '@/@types/order';
 import { ReadyStatus } from '@prisma/client';
 import { updateReadyStatusOrder } from '@/app/actions';
-import { CartItemDTO } from '@/shared/services/dto/cart.dto';
-import { ingredients } from '@/prisma/constants';
+
 import { PizzaSize, PizzaType, mapPizzaSize, mapPizzaType } from '@/shared/constants';
 
 // Определение стилей, чтобы избежать повторений
