@@ -1,4 +1,6 @@
 import { prisma } from "@/prisma/prisma client"
+import { getUserSession } from "./get-user-session";
+import { number } from "zod";
 
 
 export const findOrCreateCart = async (token: string) => {
@@ -9,6 +11,7 @@ export const findOrCreateCart = async (token: string) => {
     });
 
     if(!userCart){
+
         userCart = await prisma.cart.create({
             data: {
                 token,

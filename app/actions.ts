@@ -48,7 +48,7 @@ export async function createOrder(data: CheckoutFormValues) {
         if (userCart?.totalAmount === 0) {
         throw new Error('Cart is empty')
         }
-
+        const user =await getUserSession();
         /* Создаем заказ */
         const order = await prisma.order.create({
             data: {
@@ -61,6 +61,7 @@ export async function createOrder(data: CheckoutFormValues) {
               totalAmount: userCart.totalAmount,
               status: OrderStatus.PENDING,
               items: JSON.stringify(userCart.items),
+              userId: Number(user?.id),
             },
         });
 

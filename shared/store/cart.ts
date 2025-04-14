@@ -3,6 +3,8 @@ import { Api } from "../services/api-client";
 import { getCartDetails } from "../lib";
 import { CartStateItem } from "../lib/get-cart-details";
 import { CreateCartItemValues } from "../services/dto/cart.dto";
+import { getUserSession } from "../lib/get-user-session";
+import { useSession } from "next-auth/react";
 
 export interface CartState {
     loading: boolean;

@@ -17,6 +17,7 @@ export async function GET(req: any, res: any) {
         id: Number(user.id),
       },
       select: {
+        cart: true,
         fullName: true,
         email: true,
         password: false,

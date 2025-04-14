@@ -5,7 +5,7 @@ import { cn } from '@/shared/lib/utils';
 import { Button } from '../ui';
 import { CartDrawer } from '.';
 import { useCartStore } from '@/shared/store';
-
+ 
 interface Props {
   className?: string;
 }

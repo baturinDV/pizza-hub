@@ -9,16 +9,21 @@ import toast from 'react-hot-toast';
 import { FormInput } from '@/shared/components/shared/form';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useIsAdminStore } from '@/shared/store';
+import { useCartStore, useIsAdminStore } from '@/shared/store';
 import { UserRole } from '@prisma/client';
+import { prisma } from '@/prisma/prisma client';
+import Cookies from 'js-cookie';
 
 interface Props {
   onClose?: VoidFunction;
 }
 
 export const LoginForm: React.FC<Props> = ({ onClose }) => {
-  const router = useRouter();
   const setIsAdmin = useIsAdminStore((state) => state.setIsAdmin);
+  const cartState = useCartStore((state) => state);
+     /* React.useEffect(() => {
+          cartState.fetchCartItems();
+      }, [] );*/
   
   const form = useForm<TFormLoginValues>({
     resolver: zodResolver(formLoginSchema),
@@ -32,22 +37,26 @@ export const LoginForm: React.FC<Props> = ({ onClose }) => {
     try {
       const resp = await signIn('credentials', {
         ...data,
-        redirect: false,
+        redirect: false, 
       });
 
-      if (!resp?.ok) {
+      if (!resp?.ok) { 
         throw Error();
       }
 
       // Получаем данные о пользователе после успешной авторизации
       const userResponse = await fetch('/api/auth/me'); // Предполагаемый эндпоинт для получения данных пользователя
       const userData = await userResponse.json();
+      console.log(userData.email);
+      Cookies.set("cartToken", userData.cart?.token)
+  
       
       // Проверяем, является ли пользователь администратором
       if (userData?.role === UserRole.ADMIN) {
         setIsAdmin(true);
       } else {
         setIsAdmin(false);
+        cartState.fetchCartItems();
       }
       console.log(userData?.role);
 

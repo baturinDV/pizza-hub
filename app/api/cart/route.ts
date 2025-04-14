@@ -1,12 +1,13 @@
 import { prisma } from "@/prisma/prisma client";
 import { findOrCreateCart } from "@/shared/lib";
+import { getUserSession } from "@/shared/lib/get-user-session";
 import { updateCartTotalAmount } from "@/shared/lib/update-cart-total-amount";
 import { CreateCartItemValues } from "@/shared/services/dto/cart.dto";
 import { NextRequest, NextResponse } from "next/server";
 
 
 export async function GET(req: NextRequest) {
-  try {
+  try { 
     const token = req.cookies.get('cartToken')?.value;
 
     if (!token) {
@@ -53,7 +54,6 @@ export async function POST(req: NextRequest) {
     if (!token) {
       token = crypto.randomUUID();
     }
-
     const userCart = await findOrCreateCart(token);
 
     const data = (await req.json()) as CreateCartItemValues;
@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
         },
       });
   }
-
+ 
     const updatedUserCart = await updateCartTotalAmount(token);
 
     const resp = NextResponse.json(updatedUserCart);
