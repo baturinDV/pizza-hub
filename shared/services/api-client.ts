@@ -5,6 +5,7 @@ import * as auth from './auth';
 import * as stories from './stories';
 import * as categories from './categories';
 import * as orders from './orders';
+import * as checkAuth from './isAdmin';
 import * as productItem from './productItem'
 
 export const Api = {
@@ -15,5 +16,6 @@ export const Api = {
   stories,
   categories,
   orders,
+  checkAuth,
   productItem
 };

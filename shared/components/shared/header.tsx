@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Container } from './container';
 import { SearchInput } from './search-input';
@@ -13,6 +13,7 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { DashboardButton } from '.';
 import { useIsAdminStore } from '@/shared/store';
+import { Api } from '@/shared/services/api-client';
 
 interface Props {
     hasSearch?: boolean;
@@ -24,7 +25,17 @@ export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, clas
     const router = useRouter();
     const [openAuthModel, setOpenAuthModel] = React.useState(false);
     const searchParams = useSearchParams();
-    const isAdmin = useIsAdminStore((state) => state.isAdmin);
+    const isAdminState = useIsAdminStore((state) => state.isAdmin);
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    async function fetchIsAdmin() {
+        const response = await Api.checkAuth.isAdmin();
+        setIsAdmin(response.isAdmin);
+    }
+
+    useEffect(() => {
+        fetchIsAdmin();
+    }, []);
 
     React.useEffect(() => {
         
@@ -47,8 +58,6 @@ export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, clas
         }, 1000);
         }
     }, [])
-
-    
 
     return (
         <header className={cn("border-b", className)}>
@@ -74,8 +83,8 @@ export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, clas
                 {/* Правая часть*/}
                 <div className="flex items-center gap-3">
                     {/* Можно отобразить скелетон при загрузке */}
-
-                    {isAdmin && <DashboardButton />}
+                    
+                    {(isAdmin || isAdminState) && <DashboardButton />}
                     <AuthModel open={openAuthModel} onClose={() => setOpenAuthModel(false)} /> 
                     <ProfileButton onClickOpenModel={() => setOpenAuthModel(true)}  /> 
                     {hasCart && <CartButton />}
